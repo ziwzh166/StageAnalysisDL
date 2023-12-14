@@ -37,9 +37,9 @@ end
 y_denoised = wdenoise(y,5);
 % plot
 figure;
-plot(x,y,'DisplayName','Simulated');
+plot(x,y,'LineWidth',2,'DisplayName','Simulated');
 hold on;
-plot(x,y_denoised,'DisplayName','Denoised');
+plot(x,y_denoised,'DisplayName','Denoised','LineWidth',2);
 xlabel('x')
 ylabel('y')
 legend show

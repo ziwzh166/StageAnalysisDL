@@ -14,6 +14,7 @@ Random_spike_idx = randi(LenthData,1,LenthData/1e4);
 num = 10;
 y(1:Random_step_idx(1)) = num;
 i = 1;
+
 while i <=LenthData
     y(i) = num + randn(1,1);
     % add random stage
@@ -23,18 +24,22 @@ while i <=LenthData
     end
     % add random spikes(not well simulated)
     if ismember(i,Random_spike_idx)
-        for j = 1:5
-        y(i) = y(i)  2*randn(1,1);
+        % 5 numbers for simulating a spike
+        for j = i:i+5-1
+            y(j) = y(j-1) + 2*randn(1,1); 
         end
+         i = i + 5;
+    else
+        i = i + 1;
     end
 end
 
 y_denoised = wdenoise(y,5);
 % plot
 figure;
-plot(x,y,'DisplayName','Simulated');
+plot(x,y,'LineWidth',1,'DisplayName','Simulated');
 hold on;
-plot(x,y_denoised,'DisplayName','Denoised');
+plot(x,y_denoised,'DisplayName','Denoised','LineWidth','1');
 xlabel('x')
 ylabel('y')
 legend show
