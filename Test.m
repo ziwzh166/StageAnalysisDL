@@ -7,12 +7,12 @@ x = 1:LenthData;
 % y axis
 y = zeros(1,LenthData);
 % random step index
-Random_step_idx = randi(LenthData,1,LenthData/1e3);
+Random_step_idx = sort(randi(LenthData,1,LenthData/1e3));
 % random index for adding spikes
-Random_spike_idx = randi(LenthData,1,LenthData/1e4);
+Random_spike_idx = sort(randi(LenthData,1,LenthData/1e4));
 % initial step value
 num = 10;
-y(1:Random_step_idx(1)) = num;
+
 i = 1;
 
 while i <=LenthData
