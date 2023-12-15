@@ -43,6 +43,18 @@ plot(x,y_denoised,'DisplayName','Denoised','LineWidth',2);
 xlabel('x')
 ylabel('y')
 legend show
+%% Check prime of Denoise signal with diff
+figure;
+tiledlayout(2,1)
+ax(1) = nexttile;
+plot(x(1:end-1),diff(y))
+hold on;
+plot(x(1:end-1),diff(y_denoised))
+ax(2) = nexttile;
+plot(x,y)
+hold on;
+plot(x,y_denoised)
+linkaxes(ax,'x')
 
 
 
