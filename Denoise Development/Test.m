@@ -34,19 +34,42 @@ while i <=LenthData
     end
 end
 
-y_denoised = wdenoise(y,5);
+fprintf('Wavelet denoised\n')
+tic
+y_denoised = wdenoise(y,4);
+toc
+fprintf('Non-linear filter applied\n')
+tic
+y_filter= Apply_NLF(y,10,5,10);
+toc
+fprintf('FIR linear filter applied\n')
+tic
+y_fir = lowpass(y,0.03);
+toc
+
+
 % plot
 figure;
 plot(x,y,'LineWidth',2,'DisplayName','Simulated');
 hold on;
-plot(x,y_denoised,'DisplayName','Denoised','LineWidth',2);
+plot(x,y_denoised,'DisplayName','Wave - Denoised','LineWidth',2);
+plot(x,y_filter,'DisplayName','Non-linear- Filtered','LineWidth',2);
+plot(x,y_fir,'DisplayName','FIR - Filtered','LineWidth',2);
 xlabel('x')
 ylabel('y')
 legend show
-%% Check prime of Denoise signal
+%% Check prime of Denoise signal with diff
 figure;
-tilela
-plot(x(1:end-1),diff(y_denoised)
+tiledlayout(2,1)
+ax(1) = nexttile;
+% plot(x(1:end-1),diff(y))
+hold on;
+plot(x(1:end-1),diff(y_denoised))
+ax(2) = nexttile;
+plot(x,y)
+hold on;
+plot(x,y_denoised)
+linkaxes(ax,'x')
 
 
 
