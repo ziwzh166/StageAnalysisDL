@@ -1,0 +1,79 @@
+%% simulate some step looking signals with guassian noise plus the decreasing trend
+
+% Step length
+LenthData = 1e5;
+% x axis
+x = 1:LenthData;
+% y axis
+y = zeros(1,LenthData);
+% random step idx
+Random_step_idx = randi([1,LenthData],1,100);
+% random spike idx
+Random_spike_idx = randi([1,LenthData],1,100);
+num = 10;
+
+i = 1;
+
+while i <=LenthData
+    y(i) = num + randn(1,1);
+    % add random stage
+    if ismember(i,Random_step_idx)
+        num = num  - abs(randn(1,1));
+        y(i) = num;
+    end
+    % add random spikes(not well simulated)
+    if ismember(i,Random_spike_idx)
+        % 5 numbers for simulating a spike
+        for j = i:i+5-1
+            y(j) = y(j-1) + 2*randn(1,1); 
+        end
+         i = i + 5;
+    else
+        i = i + 1;
+    end
+end
+
+fprintf('Wavelet denoised\n')
+tic
+y_denoised = wdenoise(y,4);
+toc
+fprintf('Non-linear filter applied\n')
+tic
+y_filter= Apply_NLF(y,40,20,10);
+toc
+fprintf('FIR linear filter applied\n')
+tic
+y_filter= Apply_NLF(y,40,20,10);
+toc
+fprintf('FIR linear filter applied\n')
+tic
+y_fir = lowpass(y,0.03);
+toc
+
+
+% plot
+figure;
+plot(x,y,'LineWidth',2,'DisplayName','Simulated');
+hold on;
+plot(x,y_denoised,'DisplayName','Wave - Denoised','LineWidth',2);
+plot(x,y_filter,'DisplayName','Non-linear- Filtered','LineWidth',2);
+plot(x,y_fir,'DisplayName','FIR - Filtered','LineWidth',2);
+xlabel('x')
+ylabel('y')
+legend show
+%% Check prime of Denoise signal with diff
+figure;
+tiledlayout(2,1)
+ax(1) = nexttile;
+% plot(x(1:end-1),diff(y))
+hold on;
+plot(x(1:end-1),diff(y_denoised))
+ax(2) = nexttile;
+plot(x,y)
+hold on;
+plot(x,y_denoised)
+linkaxes(ax,'x')
+%% try the generated C code
+
+
+
